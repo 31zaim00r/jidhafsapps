@@ -1,0 +1,7 @@
+{
+  "name": "Azaa Jidhafs - Arabic Poetry Archive",
+  "description": "A high-end platform for archiving, managing, and exploring traditional Arabic poems with full PDF support and role-based access control.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
