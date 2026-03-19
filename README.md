@@ -2,19 +2,24 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# مأتم بن رجب - أرشيف القصائد
 
-This contains everything you need to run your app locally.
+هذا المشروع هو منصة رقمية لأرشفة وإدارة القصائد الشعرية والألحان، مع دعم كامل لملفات PDF ونظام صلاحيات متطور.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1xP4BNEdOhkREc6Uev3-Cwjjs2BGkvnJ4
+## المتطلبات الأساسية
+- **Node.js**: الإصدار 18 أو أحدث.
 
-## Run Locally
+## التشغيل المحلي (Linux/Mac)
+1. تثبيت المكتبات: `npm install`
+2. تشغيل المشروع: `npm run dev`
 
-**Prerequisites:**  Node.js
+## التشغيل المحلي (Windows)
+في حال واجهت مشكلة في تشغيل `npm` بسبب "Execution Policy"، استخدم الأوامر التالية:
+1. تثبيت المكتبات: `npm.cmd install`
+2. تشغيل المشروع: `npm.cmd run dev`
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## إعداد قاعدة البيانات (Supabase)
+لقد تم توحيد هيكل قاعدة البيانات في ملف واحد: `supabase/schema.sql`.
+1. قم بإنشاء مشروع جديد في Supabase.
+2. انسخ محتويات ملف `supabase/schema.sql` والصقها في **SQL Editor** داخل لوحة تحكم Supabase.
+3. قم بتحديث بيانات المشروع في ملف `.env`.

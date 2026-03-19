@@ -1,8 +1,8 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../App';
 import { Menu, Bell, User, ChevronRight } from 'lucide-react';
 import Sidebar from './Sidebar';
+import { poemService } from '../services/poemService';
 
 interface HeaderProps {
   currentPath: string;
@@ -10,8 +10,21 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ currentPath }) => {
   const { user } = useAuth();
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [newCount, setNewCount] = useState(0);
   const isHome = currentPath === '#/' || currentPath === '';
+
+  useEffect(() => {
+    const fetchNewCount = async () => {
+      try {
+        const count = await poemService.getNewPoemCount();
+        setNewCount(count);
+      } catch (e) {
+        console.error('Failed to fetch new count:', e);
+      }
+    };
+    fetchNewCount();
+  }, []);
 
   return (
     <>
@@ -44,11 +57,16 @@ const Header: React.FC<HeaderProps> = ({ currentPath }) => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-gray-700 hover:text-gold transition-colors hidden sm:block">
+            <button 
+              onClick={() => window.location.hash = '#/search'}
+              className="relative p-2 text-gray-700 hover:text-gold transition-colors"
+            >
               <Bell size={24} />
-              <span className="absolute top-1 right-1 w-4 h-4 bg-gold text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-[#f5f0e6]">
-                3
-              </span>
+              {newCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-gold text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-[#f5f0e6] animate-pulse">
+                  {newCount}
+                </span>
+              )}
             </button>
 
             <a href="#/profile" className="w-10 h-10 rounded-full bg-white shadow-sm border-2 border-white overflow-hidden flex items-center justify-center transition-transform active:scale-95">

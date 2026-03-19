@@ -146,6 +146,17 @@ export const poemService = {
     if (error) throw error;
   },
 
+  getNewPoemCount: async (): Promise<number> => {
+    const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    const { count, error } = await supabase
+      .from('poems')
+      .select('*', { count: 'exact', head: true })
+      .gt('created_at', fortyEightHoursAgo);
+
+    if (error) return 0;
+    return count || 0;
+  },
+
   // Favorites logic
   getFavorites: async (): Promise<Poem[]> => {
     const { data: { user } } = await supabase.auth.getUser();

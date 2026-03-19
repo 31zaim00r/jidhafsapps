@@ -44,9 +44,16 @@ const HomePage: React.FC = () => {
         
         <div className="relative z-10 text-white flex flex-col justify-center min-h-[150px]">
           <div className="flex items-center justify-between w-full mb-4">
-             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-inner">
-               <Sparkles size={14} className="text-gold" />
-               <span className="text-[10px] font-bold tracking-widest text-gold uppercase mt-0.5">جديد الأرشيف</span>
+             <div className="flex items-center gap-3">
+               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-inner">
+                 <Sparkles size={14} className="text-gold" />
+                 <span className="text-[10px] font-bold tracking-widest text-gold uppercase mt-0.5">جديد الأرشيف</span>
+               </div>
+               {featuredPoem.category && (
+                 <div className="flex items-center gap-2 bg-gold/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/20 shadow-inner">
+                   <span className="text-[10px] font-black tracking-widest text-gold uppercase mt-0.5">{featuredPoem.category}</span>
+                 </div>
+               )}
              </div>
              <a href={`#/poem?id=${featuredPoem.id}`} className="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full flex items-center justify-center border border-white/10 transition-all shadow-lg hover:scale-105 active:scale-95">
                 <Play size={18} className="translate-x-[-1px] translate-y-[1px]" fill="currentColor" />
@@ -99,8 +106,54 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Horizontal Poems Slider - NEWLY POSITIONED AND STYLED */}
+      {latestPoems.length > 0 && (
+      <section className="mt-8">
+        <div className="px-6 flex justify-between items-center mb-6">
+          <h2 className="text-lg font-black text-gray-900 flex items-center gap-2">
+            <BookOpen size={20} className="text-gold" />
+            أحدث القصائد
+          </h2>
+          <a href="#/poems" className="text-gray-400 hover:text-gold text-xs font-bold flex items-center transition-colors">
+            تصفح الكل <ChevronLeft size={16} />
+          </a>
+        </div>
+
+        <div className="flex gap-5 overflow-x-auto px-6 no-scrollbar pb-8 pt-1">
+          {latestPoems.map(poem => (
+            <div key={poem.id} className="min-w-[140px] w-[140px]">
+              <PoemCard
+                poem={{
+                  ...poem,
+                  name: poem.title,
+                  poetName: poem.poet_name,
+                  occasionId: poem.occasion_id || '',
+                  classification: poem.category as any,
+                  year: poem.year || 0,
+                  pdfUrl: poem.media_url || '',
+                  uploaderId: poem.created_by,
+                  downloadCount: 0,
+                  createdAt: poem.created_at
+                }}
+              />
+            </div>
+          ))}
+          {/* View More Card */}
+          <a 
+            href="#/poems" 
+            className="min-w-[140px] w-[140px] aspect-[3/4.2] rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-3 text-gray-300 hover:text-gold hover:border-gold/50 transition-all bg-white/50"
+          >
+            <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
+              <ChevronLeft size={20} />
+            </div>
+            <span className="text-xs font-bold">عرض المزيد</span>
+          </a>
+        </div>
+      </section>
+      )}
+
       {/* Categories Modern Pills */}
-      <section className="mt-6">
+      <section className="mt-4 mb-12">
         <div className="px-6 flex justify-between items-center mb-5">
           <h2 className="text-lg font-black text-gray-900 flex items-center gap-2">
             <Layers size={20} className="text-gold" />
@@ -118,38 +171,6 @@ const HomePage: React.FC = () => {
           ))}
         </div>
       </section>
-
-      {/* Newest Poems */}
-      {regularPoems.length > 0 && (
-      <section className="mt-6 mb-8">
-        <div className="px-6 flex justify-between items-center mb-6">
-          <h2 className="text-lg font-black text-gray-900">المضاف مؤخراً</h2>
-          <a href="#/poems" className="text-gray-400 hover:text-gold text-xs font-bold flex items-center transition-colors">
-            تصفح الكل <ChevronLeft size={16} />
-          </a>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 px-6 md:grid-cols-3 lg:grid-cols-4">
-          {regularPoems.map(poem => (
-            <PoemCard
-              key={poem.id}
-              poem={{
-                ...poem,
-                name: poem.title,
-                poetName: poem.poet_name,
-                occasionId: poem.occasion_id || '',
-                classification: poem.category as any,
-                year: poem.year || 0,
-                pdfUrl: poem.media_url || '',
-                uploaderId: poem.created_by,
-                downloadCount: 0,
-                createdAt: poem.created_at
-              }}
-            />
-          ))}
-        </div>
-      </section>
-      )}
     </div>
   );
 };
