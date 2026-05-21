@@ -11,6 +11,7 @@ import SearchPage from './pages/SearchPage';
 import PoemDetailsPage from './pages/PoemDetailsPage';
 import AdminDashboard from './pages/AdminDashboard';
 import UploadPoemPage from './pages/UploadPoemPage';
+import EditPoemPage from './pages/EditPoemPage';
 import ProfilePage from './pages/ProfilePage';
 import OccasionsPage from './pages/OccasionsPage';
 import MyPoemsPage from './pages/MyPoemsPage';
@@ -111,6 +112,7 @@ const App: React.FC = () => {
       case '#/search': return <SearchPage />;
       case '#/poem': return <PoemDetailsPage id={params.get('id') || ''} />;
       case '#/add-poem': return canUpload ? <UploadPoemPage /> : <HomePage />;
+      case '#/edit-poem': return user ? <EditPoemPage /> : <LoginPage />;
       case '#/my-poems': return user ? <MyPoemsPage /> : <LoginPage />;
       case '#/occasions': return <OccasionsPage />;
       case '#/admin': return isAdmin ? <AdminDashboard /> : <HomePage />;

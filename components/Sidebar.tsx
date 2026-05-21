@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X, Home, BookOpen, Info, ShieldCheck, Mail, LogOut, ChevronLeft } from 'lucide-react';
+import { X, Home, BookOpen, Info, ShieldCheck, Mail, LogOut, ChevronLeft, FileText } from 'lucide-react';
 import { useAuth } from '../App';
 import { UserRole } from '../types';
 
@@ -15,6 +15,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const menuItems = [
         { title: 'الرئيسية', icon: <Home size={20} />, href: '#/' },
         { title: 'كافة المناسبات', icon: <BookOpen size={20} />, href: '#/occasions' },
+        ...(user ? [{ title: 'قصائدي', icon: <FileText size={20} />, href: '#/my-poems' }] : []),
         { title: 'عن الأرشيف', icon: <Info size={20} />, href: '#/about' },
         { title: 'تواصل معنا', icon: <Mail size={20} />, href: '#/contact' },
     ];

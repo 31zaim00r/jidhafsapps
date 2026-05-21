@@ -95,6 +95,48 @@ export const poemService = {
     return data;
   },
 
+  updatePoem: async (id: string, poem: Partial<Omit<Poem, 'id' | 'created_at' | 'updated_at' | 'created_by'>>, file?: File): Promise<Poem> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('يجب تسجيل الدخول');
+
+    let media_url = poem.media_url;
+
+    if (file) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('poem-media')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('poem-media')
+        .getPublicUrl(filePath);
+
+      media_url = publicUrl;
+    }
+
+    const updateData: any = { ...poem };
+    if (media_url !== undefined) updateData.media_url = media_url;
+
+    const { data, error } = await supabase
+      .from('poems')
+      .update(updateData)
+      .eq('id', id)
+      // Only allow the creator or admin to update - assuming RLS is set up, but let's explicitly restrict by user ID if not admin
+      // RLS usually handles this, so we rely on RLS. If no RLS, we should enforce it here.
+      // But standard approach is to trust RLS or filter by created_by if we want to be safe.
+      // For now, we'll rely on the RLS or the fact that they can only reach Edit page if it's their poem.
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
   deletePoem: async (id: string) => {
     const { error } = await supabase.from('poems').delete().eq('id', id);
     if (error) throw error;

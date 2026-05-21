@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { poemService } from '../services/poemService';
 import { Poem } from '../types';
 import PoemCard from '../components/PoemCard';
-import { FileText, Plus, Trash2 } from 'lucide-react';
+import { FileText, Plus, Trash2, Edit3 } from 'lucide-react';
 import CustomModal from '../components/CustomModal';
 
 const MyPoemsPage: React.FC = () => {
@@ -81,28 +81,40 @@ const MyPoemsPage: React.FC = () => {
             {poems.length > 0 ? (
                 <div className="space-y-4">
                     {poems.map(poem => (
-                        <div key={poem.id} className="relative group">
-                            <PoemCard
-                                variant="list"
-                                poem={{
-                                    ...poem,
-                                    name: poem.title,
-                                    poetName: poem.poet_name,
-                                    occasionId: poem.occasion_id || '',
-                                    classification: poem.category as any,
-                                    year: poem.year || 0,
-                                    pdfUrl: poem.media_url || '',
-                                    uploaderId: poem.created_by,
-                                    downloadCount: 0,
-                                    createdAt: poem.created_at
-                                }}
-                            />
-                            <button
-                                onClick={() => handleDelete(poem.id)}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-gray-300 hover:text-red-500 transition-colors"
-                            >
-                                <Trash2 size={20} />
-                            </button>
+                        <div key={poem.id} className="flex items-center gap-3">
+                            <div className="flex-grow min-w-0">
+                                <PoemCard
+                                    variant="list"
+                                    poem={{
+                                        ...poem,
+                                        name: poem.title,
+                                        poetName: poem.poet_name,
+                                        occasionId: poem.occasion_id || '',
+                                        classification: poem.category as any,
+                                        year: poem.year || 0,
+                                        pdfUrl: poem.media_url || '',
+                                        uploaderId: poem.created_by,
+                                        downloadCount: 0,
+                                        createdAt: poem.created_at
+                                    }}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2 shrink-0">
+                                <button
+                                    onClick={() => window.location.hash = `#/edit-poem?id=${poem.id}`}
+                                    className="p-3 bg-white rounded-xl shadow-sm text-gray-400 hover:text-blue-500 transition-colors border border-gray-100 active:scale-95"
+                                    title="تعديل"
+                                >
+                                    <Edit3 size={18} />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(poem.id)}
+                                    className="p-3 bg-white rounded-xl shadow-sm text-gray-400 hover:text-red-500 transition-colors border border-gray-100 active:scale-95"
+                                    title="حذف"
+                                >
+                                    <Trash2 size={18} />
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
